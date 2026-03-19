@@ -61,10 +61,6 @@ func New(
 	}
 }
 
-// Login checks if user with given credentials exists in the system and returns access token.
-//
-// If user exists, but password is incorrect, returns error.
-// If user doesn't exist, returns error.
 func (a *Auth) Login(
 	ctx context.Context,
 	email string,
@@ -116,8 +112,6 @@ func (a *Auth) Login(
 	return token, nil
 }
 
-// RegisterNewUser registers new user in the system and returns user ID.
-// If user with given username already exists, returns error.
 func (a *Auth) RegisterNewUser(ctx context.Context, email string, pass string) (int64, error) {
 	const op = "Auth.RegisterNewUser"
 
@@ -145,7 +139,6 @@ func (a *Auth) RegisterNewUser(ctx context.Context, email string, pass string) (
 	return id, nil
 }
 
-// IsAdmin checks if user is admin.
 func (a *Auth) IsAdmin(ctx context.Context, userID int64) (bool, error) {
 	const op = "Auth.IsAdmin"
 

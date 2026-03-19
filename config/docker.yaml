@@ -1,0 +1,7 @@
+﻿env: "prod"
+storage_path: "/data/sso.db"
+grpc:
+  port: 44044
+  timeout: 5s
+token_ttl: 1h
+migrations_path: "./migrations"

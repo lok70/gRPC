@@ -1,1 +1,28 @@
+﻿# Local storage
 /storage/
+*.db
+*.sqlite
+*.sqlite3
+
+# Build artifacts
+/bin/
+/dist/
+*.exe
+*.out
+
+# Test/coverage artifacts
+coverage.out
+*.coverprofile
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE/editor
+.vscode/
+.idea/
+
+# OS junk
+.DS_Store
+Thumbs.db

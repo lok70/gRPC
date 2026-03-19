@@ -4,9 +4,10 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"path/filepath"
 
 	"github.com/golang-migrate/migrate/v4"
-	_ "github.com/golang-migrate/migrate/v4/database/sqlite3"
+	_ "github.com/golang-migrate/migrate/v4/database/sqlite"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
@@ -26,8 +27,8 @@ func main() {
 	}
 
 	m, err := migrate.New(
-		"file://"+migrationsPath,
-		fmt.Sprintf("sqlite3://%s?x-migrations-table=%s", storagePath, migrationsTable),
+		"file://"+filepath.ToSlash(migrationsPath),
+		fmt.Sprintf("sqlite://%s?x-migrations-table=%s", filepath.ToSlash(storagePath), migrationsTable),
 	)
 	if err != nil {
 		panic(err)
@@ -44,19 +45,4 @@ func main() {
 	}
 
 	fmt.Println("migrations applied")
-}
-
-// Log represents the logger
-type Log struct {
-	verbose bool
-}
-
-// Printf prints out formatted string into a log
-func (l *Log) Printf(format string, v ...interface{}) {
-	fmt.Printf(format, v...)
-}
-
-// Verbose shows if verbose print enabled
-func (l *Log) Verbose() bool {
-	return false
 }

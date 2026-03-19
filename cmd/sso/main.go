@@ -29,13 +29,14 @@ func main() {
 	}()
 
 	// Graceful shutdown
-
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT)
-
 	<-stop
 
-	application.GRPCServer.Stop()
+	if err := application.Stop(); err != nil {
+		log.Error("failed to stop application", slog.String("error", err.Error()))
+	}
+
 	log.Info("Gracefully stopped")
 }
 
@@ -50,6 +51,10 @@ func setupLogger(env string) *slog.Logger {
 			slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}),
 		)
 	case envProd:
+		log = slog.New(
+			slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}),
+		)
+	default:
 		log = slog.New(
 			slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}),
 		)

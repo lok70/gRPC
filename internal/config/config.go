@@ -9,10 +9,10 @@ import (
 )
 
 type Config struct {
-	Env            string     `yaml:"env" env-default:"local"`
-	StoragePath    string     `yaml:"storage_path" env-required:"true"`
-	GRPC           GRPCConfig `yaml:"grpc"`
-	MigrationsPath string
+	Env            string        `yaml:"env" env-default:"local"`
+	StoragePath    string        `yaml:"storage_path" env-required:"true"`
+	GRPC           GRPCConfig    `yaml:"grpc"`
+	MigrationsPath string        `yaml:"migrations_path"`
 	TokenTTL       time.Duration `yaml:"token_ttl" env-default:"1h"`
 }
 
@@ -45,9 +45,6 @@ func MustLoadPath(configPath string) *Config {
 	return &cfg
 }
 
-// fetchConfigPath fetches config path from command line flag or environment variable.
-// Priority: flag > env > default.
-// Default value is empty string.
 func fetchConfigPath() string {
 	var res string
 

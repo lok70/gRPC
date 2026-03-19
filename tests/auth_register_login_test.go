@@ -21,8 +21,6 @@ const (
 	passDefaultLen = 10
 )
 
-// TODO: add token fail validation cases
-
 func TestRegisterLogin_Login_HappyPath(t *testing.T) {
 	ctx, st := suite.New(t)
 
@@ -62,7 +60,6 @@ func TestRegisterLogin_Login_HappyPath(t *testing.T) {
 
 	const deltaSeconds = 1
 
-	// check if exp of token is in correct range, ttl get from st.Cfg.TokenTTL
 	assert.InDelta(t, loginTime.Add(st.Cfg.TokenTTL).Unix(), claims["exp"].(float64), deltaSeconds)
 }
 
@@ -194,6 +191,32 @@ func TestLogin_FailCases(t *testing.T) {
 			require.Contains(t, err.Error(), tt.expectedErr)
 		})
 	}
+}
+
+func TestIsAdmin_DefaultForNewUser(t *testing.T) {
+	ctx, st := suite.New(t)
+
+	email := gofakeit.Email()
+	pass := randomFakePassword()
+
+	respReg, err := st.AuthClient.Register(ctx, &ssov1.RegisterRequest{
+		Email:    email,
+		Password: pass,
+	})
+	require.NoError(t, err)
+	require.NotEmpty(t, respReg.GetUserId())
+
+	respIsAdmin, err := st.AuthClient.IsAdmin(ctx, &ssov1.IsAdminRequest{UserId: respReg.GetUserId()})
+	require.NoError(t, err)
+	assert.False(t, respIsAdmin.GetIsAdmin())
+}
+
+func TestIsAdmin_UserNotFound(t *testing.T) {
+	ctx, st := suite.New(t)
+
+	_, err := st.AuthClient.IsAdmin(ctx, &ssov1.IsAdminRequest{UserId: 999999})
+	require.Error(t, err)
+	require.Contains(t, err.Error(), "user not found")
 }
 
 func randomFakePassword() string {

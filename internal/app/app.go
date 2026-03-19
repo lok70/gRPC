@@ -11,6 +11,7 @@ import (
 
 type App struct {
 	GRPCServer *grpcapp.App
+	storage    *sqlite.Storage
 }
 
 func New(
@@ -30,5 +31,18 @@ func New(
 
 	return &App{
 		GRPCServer: grpcApp,
+		storage:    storage,
 	}
+}
+
+func (a *App) Stop() error {
+	if a.GRPCServer != nil {
+		a.GRPCServer.Stop()
+	}
+
+	if a.storage != nil {
+		return a.storage.Stop()
+	}
+
+	return nil
 }

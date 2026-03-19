@@ -1,0 +1,16 @@
+﻿# Build/cache
+.git
+.gitignore
+
+# Local artifacts
+storage/
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+
+# Temporary files
+tmp/
